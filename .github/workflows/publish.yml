@@ -35,7 +35,6 @@ jobs:
       # We need to use npm here because yarn does not support any no-save options
       # and we need to keep our conditional versions in resulting package
       - run: npm install --no-package-lock --strict-peer-deps --no-save vite
-      - run: yarn publish --non-interactive --no-git-tag-version
+      - run: npm publish
         env:
-          CI: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
