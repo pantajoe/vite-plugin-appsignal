@@ -1,7 +1,7 @@
 {
   "name": "vite-plugin-appsignal",
   "description": "The unofficial Appsignal plugin for Vite ⚡️",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "pantajoe",
   "license": "MIT",
   "main": "./dist/index.js",
