@@ -1,0 +1,13 @@
+src
+!src/@types/**
+.git
+.DS_Store
+node_modules
+.babelrc
+.eslintrc.json
+.gitignore
+.prettierrc
+jest.config.js
+yarn-error.log
+rollup.config.js
+*.tgz
