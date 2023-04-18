@@ -4,9 +4,6 @@ import eslint from '@rollup/plugin-eslint'
 import typescript from '@rollup/plugin-typescript'
 import pkg from './package.json'
 
-/**
- * @type { import('rollup').RollupOptions }
- */
 export default defineConfig({
   input: 'src/index.ts',
   external: ['node:util', 'vite', 'glob', 'node-fetch', 'node:path', 'node:fs', 'node:child_process'],
