@@ -38,7 +38,7 @@
     "prepare": "is-ci || husky install"
   },
   "devDependencies": {
-    "@antfu/eslint-config-ts": "^0.38.4",
+    "@antfu/eslint-config-ts": "^0.38.5",
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.6.1",
     "@rollup/plugin-commonjs": "24.1.0",
