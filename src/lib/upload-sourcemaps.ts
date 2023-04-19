@@ -41,13 +41,12 @@ async function upload(sourcemapPath: string, options: UploadOptions): Promise<vo
       debug?.('Finished sourcemap upload', { sourcemap: sourcemapPath, body: Object.fromEntries(body.entries()) })
     } else {
       const responseBody = await response.text()
-      console.error(
-        `Uploading sourcemap ${sourcemapPath} failed with message '${response.statusText}' (${response.status}).\n\nResponse: ${responseBody}\n`,
-      )
-      throw new Error(`Uploading sourcemap ${sourcemapPath} failed with status ${response.status}.`)
+      const err = `Uploading sourcemap ${sourcemapPath} failed with message '${response.statusText}' (${response.status}): ${responseBody}`
+      debug?.(err)
+      throw new Error(err)
     }
   } catch (error) {
-    console.error(`Uploading sourcemap ${sourcemapPath} failed with error '${error.message}'.`)
+    debug?.(`Uploading sourcemap ${sourcemapPath} failed with error '${error.message}'.`)
     throw error
   }
 }

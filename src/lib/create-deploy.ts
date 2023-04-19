@@ -32,13 +32,12 @@ async function createDeployMarker(opts: Options) {
       debug?.('Created deploy marker successfully', { revision })
     } else {
       const responseBody = await response.text()
-      console.error(
-        `Creating deploy marker ${revision} failed with message '${response.statusText}' (${response.status}).\n\nResponse: ${responseBody}\n`,
-      )
-      throw new Error(`Creating deploy marker ${revision} failed with status ${response.status}.`)
+      const err = `Creating deploy marker ${revision} failed with message '${response.statusText}' (${response.status}): ${responseBody}`
+      debug?.(err)
+      throw new Error(err)
     }
   } catch (error) {
-    console.error(`Creating deploy marker ${revision} failed with error '${error.message}'.`)
+    debug?.(`Creating deploy marker ${revision} failed with error '${error.message}'.`)
     throw error
   }
 }
