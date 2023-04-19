@@ -1,9 +1,10 @@
 import path from 'node:path'
-import glob from 'glob'
+import glob from 'fast-glob'
 import type { ViteAppsignalPluginOptions } from '../..'
 import { debugLogger } from './debug-logger'
 import type { UploadOptions } from './upload'
 import { upload } from './upload'
+import { pRetry } from './retry'
 
 type FindSourcemapPathsOptions = ViteAppsignalPluginOptions['sourceMaps'] & Pick<UploadOptions, 'debug'>
 function findSourcemapPaths(opts: FindSourcemapPathsOptions) {
@@ -30,5 +31,13 @@ export async function createRelease(opts: Options) {
     return
   }
 
-  await Promise.all(sourcemapPaths.map((sourcemapPath) => upload(sourcemapPath, { ...options, debug: logger })))
+  await Promise.all(
+    sourcemapPaths.map((sourcemapPath) =>
+      pRetry(() => upload(sourcemapPath, { ...options, debug: logger }), {
+        retries: 3,
+        minTimeout: 500,
+        maxTimeout: 2000,
+      }),
+    ),
+  )
 }
