@@ -8,8 +8,22 @@ It's a port of the [`vite-plugin-sentry`](https://github.com/ikenfin/vite-plugin
 
 ## Install
 
+### NPM
+
+```bash
+npm i -D vite-plugin-appsignal
+```
+
+### Yarn
+
 ```bash
 yarn add -D vite-plugin-appsignal
+```
+
+### PNPM
+
+```bash
+pnpm add -D vite-plugin-appsignal
 ```
 
 ## Configuration
