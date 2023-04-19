@@ -14,9 +14,27 @@ export interface ViteAppsignalPluginOptionsSourceMapsOptions {
 
 export interface ViteAppsignalOptions {
   /**
-   * Authentication token for API for this specific project.
+   * Organization-wide token for Appsignal API.
    */
   pushApiKey: string
+
+  /**
+   * Frontend-monitoring API Key for this specific app and environment.
+   * This will be injected into the app as `import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG.apiKey`.
+   */
+  apiKey?: string
+
+  /**
+   * App ID for this specific app and environment.
+   * Is visible in the URL when you open the app in Appsignal (directly after the `/sites/` part).
+   */
+  appId: string
+
+  /**
+   * Personal API Token for Appsignal API. Can be obtained at https://appsignal.com/users/edit.
+   */
+  personalApiToken: string
+
 
   /**
    * Name of the application, i.e. "myapp"

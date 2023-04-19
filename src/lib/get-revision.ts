@@ -4,7 +4,7 @@ interface Options {
   revision?: string
 }
 
-function getReleaseFromGit(): Promise<string> {
+function getRevisionFromGit(): Promise<string> {
   return new Promise((resolve, reject) => {
     exec('git rev-parse --short HEAD', (error, stdout) => {
       if (error) {
@@ -19,9 +19,9 @@ function getReleaseFromGit(): Promise<string> {
 /**
  * Get revision version, either from config or from git.
  */
-export async function getRelease(options: Options = {}) {
+export async function getRevision(options: Options = {}) {
   try {
-    const version = await (options.revision ? Promise.resolve(options.revision) : getReleaseFromGit())
+    const version = await (options.revision ? Promise.resolve(options.revision) : getRevisionFromGit())
     return `${version}`.trim()
   } catch {
     return undefined

@@ -1,9 +1,9 @@
 import cp from 'node:child_process'
-import { getRelease } from './get-release'
+import { getRevision } from './get-revision'
 
 describe('getRelease', () => {
   let providedRelease: string | undefined
-  const subject = () => getRelease({ revision: providedRelease })
+  const subject = () => getRevision({ revision: providedRelease })
 
   describe('when git returns valid output', () => {
     beforeEach(() => {

@@ -28,8 +28,11 @@ import Appsignal from 'vite-plugin-appsignal'
   Configure appsignal plugin
 */
 const appsignalConfig: ViteAppsignalPluginOptions = {
+  pushApiKey: '<ORGANIZATION_WIDE_APPSIGNAL_PUSH_API_KEY>',
   appName: 'my_app_backend',
-  pushApiKey: '<APPSIGNAL_PUSH_API_KEY>',
+  appId: '<APPSIGNAL_APP_ID>',
+  apiKey: '<APPSIGNAL_API_KEY_FOR_APP_AND_ENV>', // injected as apiKey into import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG
+  personalApiToken: '<PERSONAL_APPSIGNAL_API_TOKEN>',
   revision: '1.0',
   env: 'production',
   urlPrefix: 'https://my-app.com/assets',
@@ -128,10 +131,13 @@ Here are the list of all plugin options:
 
 | Option               | Type                                  | Required | Default value  | Description                                                                                                                                                                                                     |
 | -------------------- | ------------------------------------- | -------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| pushApiKey           | `string`                              | ⚠️        |                | The organization-wide authentication token to use for all communication with Appsignal.                                                                                                                         |
+| appName              | `string`                              | ⚠️        |                | The slug of the Appsignal project associated with the app.                                                                                                                                                      |
+| appId                | `string`                              | ⚠️        |                | The app ID for this specific app and environment in Appsignal. Visible in the Appsignal Dashboard URL (directly after `/sites/`)                                                                                |
+| personalApiToken     | `string`                              | ⚠️        |                | Personal Appsignal API token. Can be retrieved [here](https://appsignal.com/users/edit)                                                                                                                         |
 | debug                | `boolean`                             | ❌        | `false`        | Show debug messages during run                                                                                                                                                                                  |
 | skipEnvironmentCheck | `boolean`                             | ❌        | `false`        | By default plugin will be enabled only for production builds. Set this option to `true` to skip environment checks                                                                                              |
-| pushApiKey           | `string`                              | ⚠️        |                | The authentication token to use for all communication with Appsignal.                                                                                                                                           |
-| appName              | `string`                              | ⚠️        |                | The slug of the Appsignal project associated with the app.                                                                                                                                                      |
+| apiKey               | `string`                              | ❌        |                | The API key token for this specific app and environment. Will be injected as `import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG.apiKey`                                                                              |
 | revision             | `string`                              | ❌        |                | Unique name for revision. Defaults to short commit SHA from git (requires access to GIT and root directory to be repo)                                                                                          |
 | env                  | `string`                              | ❌        | `'production'` | Environment value for build                                                                                                                                                                                     |
 | urlPrefix            | `string`                              | ✅        |                | URL prefix to add to the beginning of all filenames. You might want to set this to the full URL. This is also useful if your files are stored in a sub folder. eg: `url-prefix 'https://my-app.com/static/js'`. |

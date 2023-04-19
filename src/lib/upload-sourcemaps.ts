@@ -1,6 +1,9 @@
 import path from 'node:path'
 import fs from 'node:fs'
-import type { ViteAppsignalOptions } from '../..'
+import glob from 'fast-glob'
+import type { ViteAppsignalOptions, ViteAppsignalPluginOptions } from '../..'
+import { debugLogger } from './debug-logger'
+import { pRetry } from './retry'
 
 const UPLOAD_URI = 'https://appsignal.com/api/sourcemaps'
 
@@ -9,7 +12,7 @@ export type UploadOptions = Omit<ViteAppsignalOptions, 'revision'> & {
   debug?: (label: string, data?: any) => unknown
 }
 
-export async function upload(sourcemapPath: string, options: UploadOptions): Promise<void> {
+async function upload(sourcemapPath: string, options: UploadOptions): Promise<void> {
   const { appName, pushApiKey, revision, env = 'production', urlPrefix = '~/', debug } = options
   debug?.('Starting sourcemap upload', sourcemapPath)
 
@@ -47,4 +50,40 @@ export async function upload(sourcemapPath: string, options: UploadOptions): Pro
     console.error(`Uploading sourcemap ${sourcemapPath} failed with error '${error.message}'.`)
     throw error
   }
+}
+
+type FindSourcemapPathsOptions = ViteAppsignalPluginOptions['sourceMaps'] & Pick<UploadOptions, 'debug'>
+function findSourcemapPaths(opts: FindSourcemapPathsOptions) {
+  const { include, exclude, debug } = opts
+
+  // use cwd and join all include paths and find by glob pattern
+  const cwd = process.cwd()
+  const globs = include.map((p) => `${path.join(cwd, p)}/**/*.map`)
+  debug?.(`Searching for sourcemaps in ${globs.join(', ')}`)
+  const paths = globs.flatMap((pattern) => glob.sync(pattern, { ignore: exclude }))
+  debug?.(`Found sourcemaps: ${paths.length}`)
+  return paths
+}
+
+type Options = Omit<UploadOptions, 'debug'> & Omit<ViteAppsignalPluginOptions, 'revision' | 'skipEnvironmentCheck'>
+export async function uploadSourcemaps(opts: Options) {
+  const { sourceMaps, debug = false, ...options } = opts
+  const logger = debug ? debugLogger : undefined
+
+  const { include, exclude } = sourceMaps
+  const sourcemapPaths = findSourcemapPaths({ include, exclude, debug: logger })
+  if (sourcemapPaths.length === 0) {
+    console.warn?.('No sourcemaps found, skipping upload')
+    return
+  }
+
+  await Promise.all(
+    sourcemapPaths.map((sourcemapPath) =>
+      pRetry(() => upload(sourcemapPath, { ...options, debug: logger }), {
+        retries: 3,
+        minTimeout: 500,
+        maxTimeout: 2000,
+      }),
+    ),
+  )
 }

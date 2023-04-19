@@ -1,7 +1,8 @@
 import type { Plugin } from 'vite'
 import type { ViteAppsignalPluginOptions } from '..'
-import { getRelease } from './lib/get-release'
-import { createRelease } from './lib/create-release'
+import { getRevision } from './lib/get-revision'
+import { createDeploy } from './lib/create-deploy'
+import { uploadSourcemaps } from './lib/upload-sourcemaps'
 
 const MODULE_ID = 'virtual:vite-plugin-appsignal/appsignal-config'
 const RESOLVED_ID = `\0${MODULE_ID}`
@@ -9,7 +10,7 @@ const RESOLVED_ID = `\0${MODULE_ID}`
 export default function ViteAppsignal(options: ViteAppsignalPluginOptions) {
   const { skipEnvironmentCheck = false } = options
 
-  const currentReleasePromise = getRelease(options)
+  const currentRevisionPromise = getRevision(options)
 
   // plugin state
   const pluginState = {
@@ -30,13 +31,13 @@ export default function ViteAppsignal(options: ViteAppsignalPluginOptions) {
      * Define revision and apiKey in `import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG`
      */
     async config() {
-      const currentRelease = await currentReleasePromise
+      const currentRevision = await currentRevisionPromise
 
       return {
         define: {
           'import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG': JSON.stringify({
-            revision: currentRelease,
-            apiKey: options.pushApiKey,
+            revision: currentRevision,
+            apiKey: options.apiKey,
           }),
         },
       }
@@ -93,14 +94,20 @@ export default function ViteAppsignal(options: ViteAppsignalPluginOptions) {
           this.warn('Running in non-production mode!')
         }
 
-        const currentRelease = await currentReleasePromise
+        const currentRelease = await currentRevisionPromise
 
         if (!currentRelease) {
           this.error('Revision returned from git is empty! Please check your config')
         } else {
           try {
-            // create revision
-            await createRelease({ ...options, revision: currentRelease })
+            // create new options object with a definitely present revision
+            const opts = { ...options, revision: currentRelease }
+
+            // create deploy
+            await createDeploy(opts)
+
+            // upload sourcemaps
+            await uploadSourcemaps(opts)
           } catch (error) {
             this.error(`Error while uploading sourcemaps to Appsignal: ${error.message}`)
           }
