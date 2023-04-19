@@ -1,9 +1,8 @@
 import path from 'node:path'
 import fs from 'node:fs'
-import fetch, { FormData } from 'node-fetch'
 import type { ViteAppsignalOptions } from '../..'
 
-const UPLOAD_URI = new URL('https://appsignal.com/api/sourcemaps')
+const UPLOAD_URI = 'https://appsignal.com/api/sourcemaps'
 
 export type UploadOptions = Omit<ViteAppsignalOptions, 'release'> & {
   release: string
@@ -19,26 +18,24 @@ export async function upload(sourcemapPath: string, options: UploadOptions): Pro
     .pop()!
     .replace(/\.map$/, '')
   const jsFileUrl = `${urlPrefix.replace(/\/$/, '')}/${jsFileName}`
-  const binary = fs.createReadStream(sourcemapPath)
+  const file = fs.readFileSync(sourcemapPath)
 
   try {
     const body = new FormData()
     body.append('push_api_key', pushApiKey)
     body.append('app_name', appName)
-    body.append('release', release)
+    body.append('revision', release)
     body.append('environment', env)
     body.append('name[]', jsFileUrl)
-    body.append('file', binary as any)
+    // @ts-expect-error FormData.append() does not accept a Buffer as second argument
+    body.append('file', file)
 
     const response = await fetch(UPLOAD_URI, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body,
     })
     if (response.ok) {
-      debug?.('Finished sourcemap upload', sourcemapPath)
+      debug?.('Finished sourcemap upload', { sourcemap: sourcemapPath, body: Object.fromEntries(body.entries()) })
     } else {
       const responseBody = await response.text()
       console.error(
