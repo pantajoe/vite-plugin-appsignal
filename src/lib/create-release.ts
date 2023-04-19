@@ -19,7 +19,7 @@ function findSourcemapPaths(opts: FindSourcemapPathsOptions) {
   return paths
 }
 
-type Options = Omit<UploadOptions, 'debug'> & Omit<ViteAppsignalPluginOptions, 'release' | 'skipEnvironmentCheck'>
+type Options = Omit<UploadOptions, 'debug'> & Omit<ViteAppsignalPluginOptions, 'revision' | 'skipEnvironmentCheck'>
 export async function createRelease(opts: Options) {
   const { sourceMaps, debug = false, ...options } = opts
   const logger = debug ? debugLogger : undefined

@@ -24,10 +24,10 @@ export interface ViteAppsignalOptions {
   appName: string
 
   /**
-   * Unique name of the release.
+   * Unique name of the revision.
    * Defaults to latest git commit SHA (requires access to GIT and root directory to be repo).
    */
-  release?: string
+  revision?: string
 
   /**
    * Environment name, i.e. "production"

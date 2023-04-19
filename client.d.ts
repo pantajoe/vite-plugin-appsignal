@@ -5,7 +5,8 @@ interface ImportMetaEnv {
    * Config options that can be passed to client from vite config
    */
   readonly VITE_PLUGIN_APPSIGNAL_CONFIG: {
-    release?: string
+    revision?: string
+    apiKey?: string
   }
 }
 

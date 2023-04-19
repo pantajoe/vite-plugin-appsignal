@@ -1,7 +1,7 @@
 import { exec } from 'node:child_process'
 
 interface Options {
-  release?: string
+  revision?: string
 }
 
 function getReleaseFromGit(): Promise<string> {
@@ -17,11 +17,11 @@ function getReleaseFromGit(): Promise<string> {
 }
 
 /**
- * Get release version, either from config or from git.
+ * Get revision version, either from config or from git.
  */
 export async function getRelease(options: Options = {}) {
   try {
-    const version = await (options.release ? Promise.resolve(options.release) : getReleaseFromGit())
+    const version = await (options.revision ? Promise.resolve(options.revision) : getReleaseFromGit())
     return `${version}`.trim()
   } catch {
     return undefined

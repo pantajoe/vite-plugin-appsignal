@@ -27,7 +27,7 @@ export default function ViteAppsignal(options: ViteAppsignalPluginOptions) {
     },
 
     /**
-     * Define release in `import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG.release`
+     * Define revision and apiKey in `import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG`
      */
     async config() {
       const currentRelease = await currentReleasePromise
@@ -35,7 +35,8 @@ export default function ViteAppsignal(options: ViteAppsignalPluginOptions) {
       return {
         define: {
           'import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG': JSON.stringify({
-            release: currentRelease,
+            revision: currentRelease,
+            apiKey: options.pushApiKey,
           }),
         },
       }
@@ -95,11 +96,11 @@ export default function ViteAppsignal(options: ViteAppsignalPluginOptions) {
         const currentRelease = await currentReleasePromise
 
         if (!currentRelease) {
-          this.error('Release returned from appsignal is empty! Please check your config')
+          this.error('Revision returned from git is empty! Please check your config')
         } else {
           try {
-            // create release
-            await createRelease({ ...options, release: currentRelease })
+            // create revision
+            await createRelease({ ...options, revision: currentRelease })
           } catch (error) {
             this.error(`Error while uploading sourcemaps to Appsignal: ${error.message}`)
           }

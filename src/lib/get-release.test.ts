@@ -3,7 +3,7 @@ import { getRelease } from './get-release'
 
 describe('getRelease', () => {
   let providedRelease: string | undefined
-  const subject = () => getRelease({ release: providedRelease })
+  const subject = () => getRelease({ revision: providedRelease })
 
   describe('when git returns valid output', () => {
     beforeEach(() => {

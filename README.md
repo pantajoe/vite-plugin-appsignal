@@ -30,7 +30,7 @@ import Appsignal from 'vite-plugin-appsignal'
 const appsignalConfig: ViteAppsignalPluginOptions = {
   appName: 'my_app_backend',
   pushApiKey: '<APPSIGNAL_PUSH_API_KEY>',
-  release: '1.0',
+  revision: '1.0',
   env: 'production',
   urlPrefix: 'https://my-app.com/assets',
   sourceMaps: {
@@ -51,9 +51,9 @@ export default defineConfig({
 
 ## Share config with Appsignal client library
 
-To correctly work with Appsignal, you need to add a **release** to your project.
+To correctly work with Appsignal, you need to add a **revision** to your project.
 
-You can expose the release used by `vite-plugin-appsignal` into your application using thge Vite feature of "virtual modules".
+You can expose the revision used by `vite-plugin-appsignal` into your application using thge Vite feature of "virtual modules".
 
 To do so, you need to add some lines of code:
 
@@ -64,17 +64,18 @@ import 'virtual:vite-plugin-appsignal/appsignal-config'
 import Appsignal from '@appsignal/javascript'
 
 // now you can use this variable like so
-const release = import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG.release;
+const { revision, apiKey: key } = import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG;
 
 // use it in appsignal init
 new Appsignal({
   // other appsignal options
-  release
+  revision,
+  key,
 })
 
 // also, these settings exposed to globalThis object
 // so you can get them from window object:
-const release = window.VITE_PLUGIN_APPSIGNAL_CONFIG.release
+const revision = window.VITE_PLUGIN_APPSIGNAL_CONFIG.revision
 ```
 
 ## TypeScript
@@ -131,8 +132,8 @@ Here are the list of all plugin options:
 | skipEnvironmentCheck | `boolean`                             | ❌        | `false`        | By default plugin will be enabled only for production builds. Set this option to `true` to skip environment checks                                                                                              |
 | pushApiKey           | `string`                              | ⚠️        |                | The authentication token to use for all communication with Appsignal.                                                                                                                                           |
 | appName              | `string`                              | ⚠️        |                | The slug of the Appsignal project associated with the app.                                                                                                                                                      |
-| release              | `string`                              | ❌        |                | Unique name for release. Defaults to short commit SHA from git (requires access to GIT and root directory to be repo)                                                                                           |
-| env                  | `string`                              | ❌        | `'production'` | Environment value for release                                                                                                                                                                                   |
+| revision             | `string`                              | ❌        |                | Unique name for revision. Defaults to short commit SHA from git (requires access to GIT and root directory to be repo)                                                                                          |
+| env                  | `string`                              | ❌        | `'production'` | Environment value for build                                                                                                                                                                                     |
 | urlPrefix            | `string`                              | ✅        |                | URL prefix to add to the beginning of all filenames. You might want to set this to the full URL. This is also useful if your files are stored in a sub folder. eg: `url-prefix 'https://my-app.com/static/js'`. |
 | sourceMaps           | `AppsignalCliUploadSourceMapsOptions` | ✅        |                | Sourcemaps settings, see details below                                                                                                                                                                          |
 
