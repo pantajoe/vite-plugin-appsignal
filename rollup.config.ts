@@ -2,7 +2,6 @@ import { defineConfig } from 'rollup'
 import commonjs from '@rollup/plugin-commonjs'
 import eslint from '@rollup/plugin-eslint'
 import typescript from '@rollup/plugin-typescript'
-import pkg from './package.json'
 
 export default defineConfig({
   input: 'src/index.ts',
@@ -10,13 +9,13 @@ export default defineConfig({
   output: [
     {
       format: 'es',
-      file: pkg.module,
+      file: 'dist/index.js',
       sourcemap: true,
       exports: 'auto',
     },
     {
       format: 'cjs',
-      file: pkg.main,
+      file: 'dist/index.cjs',
       sourcemap: true,
       exports: 'auto',
     },

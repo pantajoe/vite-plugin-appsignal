@@ -1,19 +1,32 @@
 {
   "name": "vite-plugin-appsignal",
   "description": "The unofficial Appsignal plugin for Vite ⚡️",
-  "version": "0.5.0",
+  "version": "0.6.0",
+  "type": "module",
   "author": {
     "name": "Joe Pantazidis",
     "url": "https://joepantazidis.me"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "sideEffects": false,
   "exports": {
-    "types": "./index.d.ts",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.js"
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./client.d.ts"
+    }
   },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "index.d.ts",
+    "client.d.ts"
+  ],
   "homepage": "https://github.com/pantajoe/vite-plugin-appsignal#readme",
   "bugs": {
     "url": "https://github.com/pantajoe/vite-plugin-appsignal/issues"
@@ -22,12 +35,6 @@
     "type": "git",
     "url": "https://github.com/pantajoe/vite-plugin-appsignal"
   },
-  "files": [
-    "index.d.ts",
-    "client.d.ts",
-    "types/*",
-    "dist/*"
-  ],
   "keywords": [
     "vite-plugin",
     "appsignal",
