@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import glob from 'fast-glob'
 import type { ViteAppsignalOptions, ViteAppsignalPluginOptions } from '../..'
 import { debugLogger } from './debug-logger'
+import { chunkify } from './util'
 import { pRetry } from './retry'
 
 const UPLOAD_URI = 'https://appsignal.com/api/sourcemaps'
@@ -77,12 +78,16 @@ export async function uploadSourcemaps(opts: Options) {
   }
 
   await Promise.all(
-    sourcemapPaths.map((sourcemapPath) =>
-      pRetry(() => upload(sourcemapPath, { ...options, debug: logger }), {
-        retries: 3,
-        minTimeout: 500,
-        maxTimeout: 2000,
-      }),
-    ),
+    chunkify(sourcemapPaths, 10).map(async (batch) => {
+      await Promise.all(
+        batch.map((sourcemapPath) =>
+          pRetry(() => upload(sourcemapPath, { ...options, debug: logger }), {
+            retries: 5,
+            minTimeout: 500,
+            maxTimeout: 2_000,
+          }),
+        ),
+      )
+    }),
   )
 }
