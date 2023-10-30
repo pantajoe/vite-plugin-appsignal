@@ -1,7 +1,7 @@
 {
   "name": "vite-plugin-appsignal",
   "description": "The unofficial Appsignal plugin for Vite ⚡️",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "author": {
     "name": "Joe Pantazidis",
@@ -45,8 +45,8 @@
     "dev": "NODE_ENV=develop rollup --bundleConfigAsCjs -c rollup.config.ts --configPlugin typescript -w",
     "test": "jest ./src/*/**.test.ts",
     "test:coverage": "jest --coverage ./src/*/**.test.ts",
-    "lint": "eslint ./src/**/*.ts",
-    "lint:tests": "eslint ./src/**/*.test.ts",
+    "lint": "eslint --fix --max-warnings=0 ./src/**/*.ts",
+    "lint:tests": "eslint --fix --max-warnings=0 ./src/**/*.test.ts",
     "typecheck": "tsc --noEmit",
     "prepare": "is-ci || husky install"
   },
@@ -71,6 +71,7 @@
     "rimraf": "^5.0.0",
     "rollup": "^3.20.6",
     "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
     "typescript": "5.0.4",
     "vite": "^4.2.2"
   },
