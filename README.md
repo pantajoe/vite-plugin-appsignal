@@ -49,7 +49,7 @@ const appsignalConfig: ViteAppsignalPluginOptions = {
   personalApiToken: '<PERSONAL_APPSIGNAL_API_TOKEN>',
   revision: '1.0',
   env: 'production',
-  urlPrefix: 'https://my-app.com/assets',
+  urlPrefix: 'https://my-app.com/assets', // Or `urlPrefixes: [...]` for multiple source files under different domains/prefixes
   sourceMaps: {
     include: ['./dist/assets'],
     ignore: ['node_modules'],
@@ -143,19 +143,20 @@ Here are the list of all plugin options:
 
 ✅ - Required
 
-| Option               | Type                                  | Required | Default value  | Description                                                                                                                                                                                                     |
-| -------------------- | ------------------------------------- | -------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| pushApiKey           | `string`                              | ⚠️        |                | The organization-wide authentication token to use for all communication with Appsignal.                                                                                                                         |
-| appName              | `string`                              | ⚠️        |                | The slug of the Appsignal project associated with the app.                                                                                                                                                      |
-| appId                | `string`                              | ⚠️        |                | The app ID for this specific app and environment in Appsignal. Visible in the Appsignal Dashboard URL (directly after `/sites/`)                                                                                |
-| personalApiToken     | `string`                              | ⚠️        |                | Personal Appsignal API token. Can be retrieved [here](https://appsignal.com/users/edit)                                                                                                                         |
-| debug                | `boolean`                             | ❌        | `false`        | Show debug messages during run                                                                                                                                                                                  |
-| skipEnvironmentCheck | `boolean`                             | ❌        | `false`        | By default plugin will be enabled only for production builds. Set this option to `true` to skip environment checks                                                                                              |
-| apiKey               | `string`                              | ❌        |                | The API key token for this specific app and environment. Will be injected as `import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG.apiKey`                                                                              |
-| revision             | `string`                              | ❌        |                | Unique name for revision. Defaults to short commit SHA from git (requires access to GIT and root directory to be repo)                                                                                          |
-| env                  | `string`                              | ❌        | `'production'` | Environment value for build                                                                                                                                                                                     |
-| urlPrefix            | `string`                              | ✅        |                | URL prefix to add to the beginning of all filenames. You might want to set this to the full URL. This is also useful if your files are stored in a sub folder. eg: `url-prefix 'https://my-app.com/static/js'`. |
-| sourceMaps           | `AppsignalCliUploadSourceMapsOptions` | ✅        |                | Sourcemaps settings, see details below                                                                                                                                                                          |
+| Option               | Type                                  | Required | Default value  | Description                                                                                                                                                                                                                                               |
+| -------------------- | ------------------------------------- | -------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| pushApiKey           | `string`                              | ⚠️        |                | The organization-wide authentication token to use for all communication with Appsignal.                                                                                                                                                                   |
+| appName              | `string`                              | ⚠️        |                | The slug of the Appsignal project associated with the app.                                                                                                                                                                                                |
+| appId                | `string`                              | ⚠️        |                | The app ID for this specific app and environment in Appsignal. Visible in the Appsignal Dashboard URL (directly after `/sites/`)                                                                                                                          |
+| personalApiToken     | `string`                              | ⚠️        |                | Personal Appsignal API token. Can be retrieved [here](https://appsignal.com/users/edit)                                                                                                                                                                   |
+| debug                | `boolean`                             | ❌        | `false`        | Show debug messages during run                                                                                                                                                                                                                            |
+| skipEnvironmentCheck | `boolean`                             | ❌        | `false`        | By default plugin will be enabled only for production builds. Set this option to `true` to skip environment checks                                                                                                                                        |
+| apiKey               | `string`                              | ❌        |                | The API key token for this specific app and environment. Will be injected as `import.meta.env.VITE_PLUGIN_APPSIGNAL_CONFIG.apiKey`                                                                                                                        |
+| revision             | `string`                              | ❌        |                | Unique name for revision. Defaults to short commit SHA from git (requires access to GIT and root directory to be repo)                                                                                                                                    |
+| env                  | `string`                              | ❌        | `'production'` | Environment value for build                                                                                                                                                                                                                               |
+| urlPrefix            | `string`                              | (✅)      |                | URL prefix to add to the beginning of all filenames. You might want to set this to the full URL. This is also useful if your files are stored in a sub folder. eg: `url-prefix 'https://my-app.com/static/js'`. Can be overriden by setting `urlPrefixes` |
+| urlPrefixes          | `string[]`                            | (✅)      |                | URL prefixes to add to the beginning of all filenames. You might want to set this to the full URL. This is also useful if your files are stored in a sub folder. eg: `url-prefix 'https://my-app.com/static/js'`. Overrides setting `urlPrefix`           |
+| sourceMaps           | `AppsignalCliUploadSourceMapsOptions` | ✅        |                | Sourcemaps settings, see details below                                                                                                                                                                                                                    |
 
 ### `sourceMaps` settings
 
@@ -170,9 +171,23 @@ With `sourceMaps` you can configure how sourcemaps will be processed
 
 This repo uses `jest` for unit-testing. Run `yarn test` to run all tests.
 
-## Author
+## Contributors
 
-👤 **pantajoe**
-
-* Website: [https://joepantazidis.me](https://joepantazidis.me)
-* Github: [@pantajoe](https://github.com/pantajoe)
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://joepantazidis.me">
+        <img src="https://avatars.githubusercontent.com/u/31014018?v=4" width="100px;" style="border-radius: 50%;" alt=""/><br />
+        <sub><b>Joe Pantazidis</b></sub>
+      </a><br />
+      <a href="https://github.com/pantajoe/vite-plugin-appsignal/commits?author=pantajoe" title="Code">💻</a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/webgyver">
+        <img src="https://avatars.githubusercontent.com/u/1511497?v=4" width="100px;" style="border-radius: 50%;" alt=""/><br />
+        <sub><b>Christian Breidler</b></sub>
+      </a><br />
+      <a href="https://github.com/pantajoe/vite-plugin-appsignal/commits?author=webgyver" title="Code">💻</a>
+    </td>
+  </tr>
+</table>
