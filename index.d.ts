@@ -62,6 +62,12 @@ export interface ViteAppsignalOptions {
    * @default '~/'
    */
   urlPrefix?: string
+
+  /**
+   * List of URL prefixes to add to the beginning of all filenames, cloud be used instead of a single `urlPrefix`.
+   * Defaults to an array with a `urlPrefix` as single entry.
+   */
+  urlPrefixes?: string[]
 }
 
 /**

@@ -14,14 +14,16 @@ export type UploadOptions = Omit<ViteAppsignalOptions, 'revision'> & {
 }
 
 async function upload(sourcemapPath: string, options: UploadOptions): Promise<void> {
-  const { appName, pushApiKey, revision, env = 'production', urlPrefix = '~/', debug } = options
+  const { appName, pushApiKey, revision, env = 'production', urlPrefix = '~/', urlPrefixes = [], debug } = options
   debug?.('Starting sourcemap upload', sourcemapPath)
 
   const jsFileName = sourcemapPath
     .split(path.sep)
     .pop()!
     .replace(/\.map$/, '')
-  const jsFileUrl = `${urlPrefix.replace(/\/$/, '')}/${jsFileName}`
+  const jsFileUrls = (urlPrefixes.length === 0 ? [urlPrefix] : urlPrefixes).map(
+    (urlPrefix) => `${urlPrefix.replace(/\/$/, '')}/${jsFileName}`,
+  )
   const file = fs.readFileSync(sourcemapPath)
 
   try {
@@ -30,7 +32,7 @@ async function upload(sourcemapPath: string, options: UploadOptions): Promise<vo
     body.append('app_name', appName)
     body.append('revision', revision)
     body.append('environment', env)
-    body.append('name[]', jsFileUrl)
+    jsFileUrls.forEach((jsFileUrl) => body.append('name[]', jsFileUrl))
     // @ts-expect-error FormData.append() does not accept a Buffer as second argument
     body.append('file', file)
 
