@@ -80,7 +80,7 @@ export async function uploadSourcemaps(opts: Options) {
   }
 
   await Promise.all(
-    chunkify(sourcemapPaths, 5).map(async (batch) => {
+    chunkify(sourcemapPaths, 3).map(async (batch) => {
       await Promise.all(
         batch.map((sourcemapPath) =>
           pRetry(() => upload(sourcemapPath, { ...options, debug: logger }), {
