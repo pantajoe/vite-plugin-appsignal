@@ -58,7 +58,7 @@
     "@rollup/plugin-eslint": "^9.0.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/eslint": "^8.37.0",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "@types/node": "^18.0.1",
     "@types/retry": "^0.12.2",
     "eslint": "8.38.0",
