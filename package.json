@@ -52,8 +52,8 @@
   },
   "devDependencies": {
     "@antfu/eslint-config-ts": "^0.38.5",
-    "@commitlint/cli": "^17.8.1",
-    "@commitlint/config-conventional": "^17.8.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@rollup/plugin-commonjs": "24.1.0",
     "@rollup/plugin-eslint": "^9.0.0",
     "@rollup/plugin-typescript": "^11.0.0",
